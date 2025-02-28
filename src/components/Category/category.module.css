@@ -1,0 +1,62 @@
+.category_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  max-width: 1600px; 
+  gap: 20px;  
+  padding: 20px;
+  margin-top: -10%;
+  justify-content: center; 
+  margin-top: -10%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.category {
+  height: auto; /* Adjust height dynamically based on content */
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Ensures images don't overflow */
+  transition: box-shadow 0.3s ease; /* Smooth shadow transition on hover */
+  text-align: center;
+}
+
+.category:hover {
+   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /*Enhanced shadow on hover */
+}
+
+.category img {
+  width: 100%; /* Full width image */
+  height: auto; /* Allow height to adjust automatically */
+  object-fit: contain; /* Ensures the entire image is visible without cropping */
+  max-height: 250px; /* Optional: Set a maximum height to prevent overly tall images */
+  border-bottom: 1px solid #eee; /* Separator line below the image */
+}
+
+.category a {
+  text-decoration: none;
+  color: #232f3e; /* Dark gray text for readability */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  height: 100%;
+}
+
+.category h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #232f3e; /* Consistent with Amazon's dark blue */
+}
+
+.category p {
+  font-weight: bold;
+  margin-top: 5px; 
+ cursor: pointer;  /* Pointer cursor for interactivity */
+  font-size: 12px;
+    font-weight: bold;
+    color: rgb(9, 132, 209);
+}
+
