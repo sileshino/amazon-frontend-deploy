@@ -1,5 +1,5 @@
 import React, { useState,useContext } from 'react'
-import LayOut from '../../Components/LayOut/LayOut'
+import layout from '../../components/Layout/layout';
 import classes from './signUp.module.css';
 import { Link,useNavigate,useLocation } from  'react-router-dom';
 import {  auth} from '../../Utility/firebase'
@@ -8,7 +8,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { ClipLoader } from "react-spinners";
-import { DataContext } from '../../Components/DataProvider/DataProvider';
+import { DataContext } from '../../components/DataProvider/DataProvider';
 import {Type} from '../../Utility/action'
 
 
