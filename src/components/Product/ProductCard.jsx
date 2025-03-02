@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import CurrencyFormat from "../currencyFormat/currencyFormat";
+import CurrencyFormat from "../CurrencyFormat/CurrencyFormat";
 import styles from "./product.module.css";
 import { Rating } from "@mui/material";
 import { useContext } from "react";
