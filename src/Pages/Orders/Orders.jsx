@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import LayOut from "../../components/Layout/Layout";
+import LayOut from "../../components/Layout/layout";
 import classes from "./Orders.module.css";
 import { db } from "../../Utility/firebase";
 import { DataContext } from "../../components/DataProvider/DataProvider";

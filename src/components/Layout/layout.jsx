@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../Header/Header';
 
-const Layout = ({children}) => {
+const layout = ({children}) => {
   return (
     <div>
       <Header />
@@ -10,4 +10,4 @@ const Layout = ({children}) => {
   );
 }
 
-export default Layout
+export default layout
