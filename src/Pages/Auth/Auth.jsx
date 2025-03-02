@@ -1,5 +1,5 @@
 import React, { useState,useContext } from 'react'
-import layout from '../../components/Layout/layout';
+import layout from '../../components/Layout/Layout';
 import classes from './signUp.module.css';
 import { Link,useNavigate,useLocation } from  'react-router-dom';
 import {  auth} from '../../Utility/firebase'

@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import classes from './payment.module.css'
-import layout from "../../components/Layout/layout";
+import classes from "./Payment.module.css";
+import LayOut from "../../components/Layout/Layout";
 import { DataContext } from "../../components/DataProvider/DataProvider";
 import ProductCard from "../../components/Product/ProductCard";
-import {useStripe,useElements,CardElement} from '@stripe/react-stripe-js'
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import CurrencyFormat from "../../components/currencyFormat/currencyFormat";
 import { axiosInstance } from "../../Api/axios";
 import { ClipLoader } from "react-spinners";
@@ -30,7 +30,6 @@ function Payment() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    // console.log(e);
     e?.error?.message ? setCardError(e?.error?.message) : setCardError("");
   };
 
@@ -38,102 +37,117 @@ function Payment() {
     e.preventDefault();
     try {
       setProcessing(true);
-      // 1. backend || functions ---> contact to the client secret
+
+      // Step 1: Get client secret from backend
       const response = await axiosInstance({
         method: "POST",
         url: `/payment/create?total=${total * 100}`,
       });
 
       const clientSecret = response.data?.clientSecret;
-      // 2. client side (react side confirmation)
-      // const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      //   payment_method: {
-      //     card: elements.getElement(CardElement),
-      //   },
-      // });
 
-    let confirmation = await stripe.confirmCardPayment(clientSecret,{
-      payment_method : {
-        card : elements.getElement(CardElement)
+      if (!clientSecret) {
+        throw new Error("Failed to retrieve client secret");
       }
-    })
-      let paymentIntent = confirmation.error.payment_intent
-      // 3. after the confirmation --> order firestore database save, clear basket
-      await db.collection("users").doc(user?.uid).collection("orders").doc(paymentIntent.id).set({
-        basket,
-        amount : paymentIntent.amount,
-        created :paymentIntent.created
-      }).catch((err)=>{
-        console.log(err.message)
-      })
-      // empty the basket
+
+      // Step 2: Confirm payment with Stripe
+      const confirmation = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      });
+
+      if (confirmation.error) {
+        throw new Error(confirmation.error.message);
+      }
+
+      const paymentIntent = confirmation.paymentIntent;
+
+      // Step 3: Save order to Firestore
+      await db
+        .collection("users")
+        .doc(user?.uid)
+        .collection("orders")
+        .doc(paymentIntent.id)
+        .set({
+          basket,
+          amount: paymentIntent.amount,
+          created: paymentIntent.created,
+        });
+
+      // Step 4: Clear the basket
       dispatch({ type: Type.EMPTY_BASKET });
-      setProcessing(false);
-      navigate("/orders", { state: { msg: "you have placed new Order" } });
+
+      // Step 5: Navigate to the orders page
+      navigate("/orders", { state: { msg: "You have placed a new order!" } });
     } catch (error) {
-      console.log(error.message);
+      console.error("Payment error:", error.message);
+      setCardError(error.message || "An unexpected error occurred.");
+    } finally {
       setProcessing(false);
     }
   };
 
   return (
     <LayOut>
-      {/* header */}
+      {/* Header */}
       <div className={classes.payment__header}>
         Checkout ({totalItem}) items
       </div>
-      {/* payment method */}
+
+      {/* Payment Section */}
       <section className={classes.payment}>
-        {/* address */}
+        {/* Delivery Address */}
         <div className={classes.flex}>
           <h3>Delivery Address</h3>
           <div>
             <div>{user?.email}</div>
-            <div>Adawa street</div>
-            <div>Ethiopia</div>
+            <div>123 React Lane</div>
+            <div>Chicago, IL</div>
           </div>
         </div>
         <hr />
 
-        {/* product */}
+        {/* Review Items */}
         <div className={classes.flex}>
-          <h3>Review items and delivery</h3>
+          <h3>Review Items and Delivery</h3>
           <div>
-            {basket?.map((item ,i) => (
+            {basket?.map((item, i) => (
               <ProductCard key={i} product={item} flex={true} />
             ))}
           </div>
         </div>
         <hr />
 
-        {/* card form */}
+        {/* Payment Method */}
         <div className={classes.flex}>
-          <h3>Payment methods</h3>
+          <h3>Payment Methods</h3>
           <div className={classes.payment__card__container}>
             <div className={classes.payment__details}>
               <form onSubmit={handlePayment}>
-                {/* error */}
+                {/* Card Error */}
                 {cardError && (
                   <small style={{ color: "red" }}>{cardError}</small>
                 )}
-                {/* card element */}
+
+                {/* Card Element */}
                 <CardElement onChange={handleChange} />
 
-                {/* price */}
+                {/* Total Price */}
                 <div className={classes.payment__price}>
                   <div>
                     <span style={{ display: "flex", gap: "10px" }}>
                       <p>Total Order |</p> <CurrencyFormat amount={total} />
                     </span>
                   </div>
-                  <button type="submit">
+                  <button type="submit" disabled={!stripe || processing}>
                     {processing ? (
                       <div className={classes.loading}>
                         <ClipLoader color="gray" size={12} />
-                        <p>Please Wait ...</p>
+                        <p>Please Wait...</p>
                       </div>
                     ) : (
-                      " Pay Now"
+                      "Pay Now"
                     )}
                   </button>
                 </div>
