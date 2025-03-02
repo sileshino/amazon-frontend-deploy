@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import classes from "./Payment.module.css";
-import LayOut from "../../Components/LayOut/LayOut";
-import { DataContext } from "../../Components/DataProvider/DataProvider";
-import ProductCard from "../../Components/Product/ProductCard";
+import layout from "../../components/Layout/layout";
+import { DataContext } from "../../components/DataProvider/DataProvider";
+import ProductCard from "../../components/Product/ProductCard";
 import {useStripe,useElements,CardElement} from '@stripe/react-stripe-js'
-import CurrencyFormat from "../../Components/currencyFormat/currencyFormat";
+import CurrencyFormat from "../../components/currencyFormat/currencyFormat";
 import { axiosInstance } from "../../Api/axios";
 import { ClipLoader } from "react-spinners";
 import { db } from "../../Utility/firebase";
