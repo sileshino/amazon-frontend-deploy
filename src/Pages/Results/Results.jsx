@@ -1,5 +1,5 @@
 import axios from "axios";
-import Layout from "../../components/Layout/layout";
+import Layout from "../../components/Layout/Layout";
 import { useParams } from "react-router";
 import { productUrl } from "../../Api/endPoints";
 import { useEffect, useState } from "react";
